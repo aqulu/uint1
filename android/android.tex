@@ -1,0 +1,248 @@
+\documentclass{report}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage[textwidth=500pt, textheight=650pt]{geometry}
+
+\begin{document}
+\lstset{language=xml}
+
+\section*{Basics}
+
+\subsection*{AndroidManifest.xml}
+\begin{lstlisting}
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" 
+	package="ch.hsr.hyoumen" >
+
+	<uses-sdk
+		android:minSdkVersion="14"
+		android:targetSdkVersion="18" />
+
+	<uses-permission android:name="android.permission.INTERNET" />
+	
+	<application
+		android:allowBackup="true"
+		android:icon="@drawable/ic_launcher"
+		android:label="@string/app_name"
+		android:theme="@style/AppTheme" >
+		<activity 
+			android:name="ch.hsr.hyoumen.LoginActivity"
+			android:label="@string/app_name"
+			android:windowSoftInputMode="adjustResize|stateVisible" >
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity
+			android:name="ch.hsr.hyoumen.MainActivity"
+			android:label="@string/activity_main"
+			android:theme="@style/AppTheme" >
+		</activity>
+	</application>
+</manifest>
+\end{lstlisting}
+~\par
+\subsection*{strings.xml}
+
+\begin{lstlisting}
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">hyoumen</string>
+	<string name="activity_login">Login</string>
+	<string name="activity_main">Gadgetothek</string>
+	<!-- usw -->
+</resources>
+\end{lstlisting}
+
+\newpage
+\subsection*{activity\_login.xml (min)}
+\begin{lstlisting}
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+	xmlns:tools="http://schemas.android.com/tools" 
+	android:layout_width="match_parent" android:layout_height="match_parent" 
+	android:paddingLeft="@dimen/activity_horizontal_margin" 
+	android:paddingRight="@dimen/activity_horizontal_margin"
+	android:paddingTop="@dimen/activity_vertical_margin" 
+	android:paddingBottom="@dimen/activity_vertical_margin"
+	tools:context="ch.hsr.hyoumen.LoginActivity">
+
+	<LinearLayout
+		android:orientation="vertical"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:layout_alignParentTop="true"
+		android:layout_alignParentStart="true">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:text="@string/activity_login"/>
+			android:id="@+id/title_activity_login"/>
+
+		<TextView
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:id="@+id/label_email"
+			android:text="@string/text_email" />
+
+		<EditText
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:inputType="textEmailAddress"
+			android:ems="10"
+			android:id="@+id/email" />
+
+		<Button
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Login"
+			android:id="@+id/button_login" />
+	</LinearLayout>
+</RelativeLayout>
+
+\end{lstlisting}
+\newpage
+
+\subsection*{LoginActivity.java}
+findViewById(), OnClickListener() und startActivity(new Intent())
+\begin{lstlisting}[language=Java]
+
+public class LoginActivity extends Activity {
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_login);
+		
+		Button registerButton = (Button) findViewById(R.id.button_register);
+		registerButton.setOnClickListener(new OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+		        startActivity(new Intent(LoginActivity.this, 
+						RegisterActivity.class));
+		    }
+		});
+	}
+}
+\end{lstlisting}
+
+\newpage
+
+\section*{Custom ListView}
+
+\subsection*{activity\_main.xml}
+
+\begin{lstlisting}
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+	xmlns:tools="http://schemas.android.com/tools" 
+	android:layout_width="match_parent" android:layout_height="match_parent" 
+	android:paddingLeft="@dimen/activity_horizontal_margin" 
+	android:paddingRight="@dimen/activity_horizontal_margin"
+	android:paddingTop="@dimen/activity_vertical_margin" 
+	android:paddingBottom="@dimen/activity_vertical_margin"
+	tools:context="ch.hsr.hyoumen.MainActivity">
+
+	<!-- ganz viel anders zeugs -->
+
+	<ListView
+		android:layout_width="match_parent"
+		android:layout_height="150dp"
+		android:id="@+id/list_loans" />
+
+	<!-- nomol uu viel zueg -->
+
+</RelativeLayout>
+\end{lstlisting}
+
+~\par
+\subsection*{loan\_row.xml}
+\begin{lstlisting}
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="horizontal"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<TextView
+		android:id="@+id/label_text"
+		android:layout_weight="1"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textSize="20sp"
+		android:layout_gravity="start"
+		android:padding="5dp" />
+	<TextView
+		android:id="@+id/label_date"
+		android:layout_weight="1"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textSize="20sp"
+		android:layout_gravity="end"
+		android:padding="5dp" />
+</LinearLayout> 
+
+\end{lstlisting}
+
+\newpage
+\subsection* {MainActivity.java}
+\begin{lstlisting}[language=Java]
+public class MainActivity extends Activity {
+	private ListView loanList;
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+
+		loanList = (ListView) findViewById(R.id.list_loans);
+		List<Loan> listToDisplay = new ArrayList<Loan>();
+		loanList.setAdapter(new LoanAdapter(MainActivity.this, 
+						R.layout.loan_row, listToDisplay));
+	}
+}
+\end{lstlisting}
+
+
+\subsection* {LoanAdapter.java}
+\begin{lstlisting}[language=Java]
+public class LoanAdapter extends ArrayAdapter<Loan> {
+
+	public LoanAdapter(Context context, int resource, List<Loan> objects) {
+		super(context, resource, objects);
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		final Loan loan = getItem(position);
+
+		if (convertView == null) {
+			LayoutInflater layoutInflater = (LayoutInflater) this.getContext().
+					getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			convertView = layoutInflater.inflate(R.layout.loan_row, null);
+		}
+
+
+		if(loan != null) {
+			TextView textName = 
+				(TextView) convertView.findViewById(R.id.label_text);
+
+			TextView textDate = 
+				(TextView) convertView.findViewById(R.id.label_date);
+
+			if (loan.getPickupDate() != null) {
+				textDate.setText(loan.getPickupDate().toString());
+			}
+			if(loan.getGadget() != null) {
+				textName.setText(loan.getGadget().getName());
+			}
+		}
+
+		return convertView;
+	}
+}
+\end{lstlisting}
+
+
+\end{document}
