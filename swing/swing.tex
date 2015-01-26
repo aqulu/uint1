@@ -122,6 +122,16 @@ public class GadgetTableModel extends AbstractTableModel implements Observer {
 		default: return null;
 		}
 	}
+		
+	@Override
+	public Object getColumnClass(int columnIndex) {
+		Gadget gadget = this.gadgets.get(rowIndex);
+		switch(columnIndex) {
+		case 3: return Number.class;
+		case 5: return Boolean.class;
+		default: return Object.class;
+		}
+	}
 	
 	@Override
 	public String getColumnName(int columnIndex) {
